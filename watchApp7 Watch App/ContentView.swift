@@ -1,24 +1,26 @@
+// ContentView.swift
+// watchApp7 Watch App
 //
-//  ContentView.swift
-//  watchApp7 Watch App
-//
-//  Created by Tolga Bilgis on 6/1/25.
-//
+// Created by Tolga Bilgis on 6/1/25.
+
 
 import SwiftUI
+import HealthKit
 
 struct ContentView: View {
+    @StateObject private var heartRateManager = HeartRateManager()
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if let bpm = heartRateManager.heartRate {
+                Text("❤️ \(Int(bpm)) BPM")
+                    .font(.title)
+            } else {
+                Text("Requesting...")
+            }
         }
-        .padding()
+        .onAppear {
+            heartRateManager.requestAuthorization()
+        }
     }
-}
-
-#Preview {
-    ContentView()
 }
